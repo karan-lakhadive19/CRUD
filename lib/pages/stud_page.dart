@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -21,8 +22,17 @@ class StudentPageState extends State<StudentPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  addUser() {
-    print("User added");
+  // Adding student
+  CollectionReference students =
+      FirebaseFirestore.instance.collection('students');
+
+ Future<void> addUser() {
+    // print("User added");
+    return students.add({
+      'name':name,
+      'email':email,
+      'password':password
+    }).then((value) => print("User added")).catchError((error)=>print("Unable to add user"));
   }
 
   clearText() {
@@ -32,14 +42,12 @@ class StudentPageState extends State<StudentPage> {
   }
 
   @override
-
   void dispose() {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
-
 
   Widget build(BuildContext context) {
     return Scaffold(
